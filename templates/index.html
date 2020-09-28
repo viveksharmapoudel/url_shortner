@@ -1,0 +1,69 @@
+{%load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+	
+	<div class="container">
+			<div class="">
+				{% if  failure_msz %}
+				{{failure_msz }}
+				{% endif %}	
+				<div id="msz" class="text-info"></div>
+
+				<div class="form-group">
+				  <label for="url">Enter your URL:</label>
+				  <input type="text" class="form-control" id="url">
+				</div>
+
+				<a href= "#" id="submit" class= "btn btn-info"> submit </a>
+
+				<div id="full_shortend_url" class="text-success"></div>
+					
+		</div>
+	</div>
+	<!--Javscripts-->
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" ></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script>
+		$(document).ready(function(e){
+			$("#submit").click(function(){
+				var url= $("#url").val();
+				console.log("test");
+				var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    								'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    								'((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    								'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+   									'(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    								'(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  					if  (!!pattern.test(url)){
+  						$.ajax({type:'GET',
+  								url:"submit/",
+  								data:{
+  									url:url,
+  								},
+  								success: function(json_data){
+  									$("#msz").html(json_data['msz']);
+  									$("#full_shortend_url").html(json_data['full_shortend_url']);
+  								},
+
+  						});
+  					}
+  					else{
+  						$("#msz").html("This url is not valid please type again");
+  						$("#full_shortend_url").html("");
+
+  					};
+			});
+		});
+	</script>
+</body>
+</html>
